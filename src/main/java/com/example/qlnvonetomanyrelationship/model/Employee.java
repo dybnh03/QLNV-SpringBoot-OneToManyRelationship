@@ -2,10 +2,9 @@ package com.example.qlnvonetomanyrelationship.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
 
 import javax.persistence.*;
 
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "employee")
-
+@AllArgsConstructor
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,31 +23,10 @@ public class Employee {
     private String position;
     private double salary;
 
-
     @ManyToOne
-    @JoinColumn(name = "department_Id", nullable = false, referencedColumnName = "department_Id")
-
-
-    @JsonBackReference
-    private Department dpm;
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 
     public Employee() {
     }
-
-    public Employee(String name, String phone, String address, String position, double salary) {
-        this.name = name;
-        this.phone = phone;
-        this.address = address;
-        this.position = position;
-        this.salary = salary;
-
-    }
-
-
-    public void setDepartment(Department dpm) {
-        this.dpm = dpm;
-    }
-
-
-
 }

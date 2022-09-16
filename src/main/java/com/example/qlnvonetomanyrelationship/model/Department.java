@@ -1,6 +1,7 @@
 package com.example.qlnvonetomanyrelationship.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,23 +21,12 @@ import java.util.Set;
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "department_Id")
+    @Column(name = "department_id")
     private long departmentId;
     private String departmentName;
-    @OneToMany(mappedBy = "dpm", cascade = CascadeType.ALL)
 
-    @JsonManagedReference
-    private Set<Employee> emp;
-
-
-    public void setEmployee(Set<Employee> emp ){
-        this.emp = emp;
-    }
-
-    public Department(String departmentName){
-        this.departmentName = departmentName;
-    }
-
-
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Employee> employees;
 
 }

@@ -2,11 +2,19 @@ package com.example.qlnvonetomanyrelationship.service;
 
 import com.example.qlnvonetomanyrelationship.model.Department;
 
-import java.util.List;
+
 
 public interface DepartmentService {
 
-        Department findById(long department_Id);
+        Department getDepartmentById(long departmentId);
 
-        void save(Department dpm);
+
+
+        Department getAllDepartment();
+
+        void createDepartment(Department dpm);
+
+        Department updateDepartment(long departmentId, Department dpm);
+
+        public void deleteDepartment(long departmentId);
 }

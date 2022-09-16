@@ -7,29 +7,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
-    @Autowired
+//    @Autowired
+//    private ModelMapper
     private  DepartmentRepository departmentRepository;
 
     public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
         this.departmentRepository = departmentRepository;
     }
 
-    @Override
-    public Department findById(long department_Id) {
-        return this.departmentRepository.findById(department_Id).orElse(null);
 
+
+    @Override
+    public void createDepartment(Department dpm){
+         departmentRepository.save(dpm);
     }
 
 
+    @Override
+    public Department getDepartmentById(long departmentId) {
+        return this.departmentRepository.findById(departmentId).orElse(null);
 
-
+    }
 
     @Override
-    public void save(Department dpm){
-        this.departmentRepository.save(dpm);
+    public Department getAllDepartment(){
+        return (Department) departmentRepository.findAll();
+    }
+
+    @Override
+    public Department updateDepartment(long departmentId, Department dpm){
+        Department dpmFound =departmentRepository.findById(departmentId).orElse(null);
+        dpmFound.setDepartmentId(dpm.getDepartmentId());
+        dpmFound.setDepartmentName(dpm.getDepartmentName());
+    return departmentRepository.save(dpmFound);
+    }
+
+    @Override
+    public void deleteDepartment(long departmentId){
+        Department dpmFound = departmentRepository.findById(departmentId).orElse(null);
+        departmentRepository.deleteById(dpmFound.getDepartmentId());
     }
 
 }
