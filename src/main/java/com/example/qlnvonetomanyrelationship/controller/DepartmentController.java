@@ -1,11 +1,16 @@
 package com.example.qlnvonetomanyrelationship.controller;
 
+import com.example.qlnvonetomanyrelationship.dto.DepartmentDto;
 import com.example.qlnvonetomanyrelationship.model.Department;
 import com.example.qlnvonetomanyrelationship.service.DepartmentService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -14,35 +19,60 @@ import java.util.List;
 public class DepartmentController {
     @Autowired
     private DepartmentService departmentService;
+    private ModelMapper modelMapper;
 
-    @PostMapping("/createDepartment")
-    public void createDepartment(@RequestBody Department dpm){
-       departmentService.createDepartment(dpm);
+    public DepartmentController(DepartmentService departmentService, ModelMapper modelMapper) {
+        super();
+        this.departmentService = departmentService;
+        this.modelMapper = modelMapper;
     }
 
-    @PutMapping("/updateDepartmentById/{id}")
-    public Department updateDepartment(@PathVariable long departmentId, @RequestBody Department dpm){
-        Department dpmFound = departmentService.getDepartmentById(departmentId);
-        dpmFound.setDepartmentId(dpm.getDepartmentId());
-        dpmFound.setDepartmentName(dpm.getDepartmentName());
-        return departmentService.updateDepartment(dpmFound.getDepartmentId(), dpmFound);
+    @PostMapping("/createDepartment")
+    public ResponseEntity<DepartmentDto> createDepartment(@RequestBody DepartmentDto dpmDto){
+        // convert DTO to entity
+       Department dpmRequest = modelMapper.map(dpmDto, Department.class);
+       Department dpm = departmentService.createDepartment(dpmRequest);
+        // convert entity to DTO
+       DepartmentDto dpmResponse = modelMapper.map(dpm, DepartmentDto.class);
+
+       return new ResponseEntity<DepartmentDto>(dpmResponse,HttpStatus.CREATED);
+    }
+
+    @PutMapping("/updateDepartmentById")
+    public ResponseEntity<DepartmentDto> updateDepartment(@RequestBody DepartmentDto dpmDto){
+        // convert DTO to Entity
+        Department dpmRequest = modelMapper. map(dpmDto, Department.class);
+        Department dpm = departmentService.updateDepartment(dpmRequest);
+        // entity to DTO
+        DepartmentDto dpmResponse = modelMapper.map(dpm, DepartmentDto.class);
+        return ResponseEntity.ok().body(dpmResponse);
+
+
+
     }
 
     @GetMapping("/getAllDepartment")
-    public Department getAllDepartment(){
-        return departmentService.getAllDepartment();
+    public List<DepartmentDto> getAllDepartment(){
+
+        return departmentService.getAllDepartment().stream().map(dpm -> modelMapper.map(dpm, DepartmentDto.class)).collect(Collectors.toList());
     }
 
 
     @GetMapping("/getDepartmentById/{id}")
-    public Department getDepartmentById(@PathVariable long departmentId) {
-        return departmentService.getDepartmentById(departmentId);
+    public ResponseEntity<DepartmentDto> getDepartmentById(@PathVariable long id) {
+
+        Department dpm = departmentService.getDepartmentById(id);
+        // entity to DTO
+
+        DepartmentDto dpmResponse = modelMapper.map(dpm, DepartmentDto.class);
+       return ResponseEntity.ok().body(dpmResponse) ;
     }
 
     @DeleteMapping("/deleteDepartmentByid/{id}")
-    public void deleteDepartment(@PathVariable long departmentId){
-        Department dpmFound = departmentService.getDepartmentById(departmentId);
-        departmentService.deleteDepartment(dpmFound.getDepartmentId());
+    public ResponseEntity<Void> deleteDepartment(@PathVariable long id){
+        departmentService.deleteDepartment(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 

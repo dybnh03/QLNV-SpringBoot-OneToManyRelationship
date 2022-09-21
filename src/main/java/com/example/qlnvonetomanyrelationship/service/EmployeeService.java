@@ -1,10 +1,13 @@
 package com.example.qlnvonetomanyrelationship.service;
 import com.example.qlnvonetomanyrelationship.model.Employee;
+
+import java.util.List;
+
 public interface EmployeeService {
-     void createEmployee(Employee emp);
+     Employee createEmployee(Employee emp);
      Employee findEmployeeById(long id);
-     Employee findAllEmployee();
-     Employee updateEmployeeById(long id, Employee emp);
-     Employee saveEmployee(Employee emp);
+     List<Employee> findAllEmployee();
+     Employee updateEmployeeById(Employee emp);
+
      void deleteEmployeeById(long id);
 }

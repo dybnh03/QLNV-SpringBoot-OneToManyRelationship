@@ -6,11 +6,12 @@ import com.example.qlnvonetomanyrelationship.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
-//    @Autowired
-//    private ModelMapper
+    @Autowired
     private  DepartmentRepository departmentRepository;
 
     public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
@@ -20,34 +21,34 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
     @Override
-    public void createDepartment(Department dpm){
-         departmentRepository.save(dpm);
+    public Department createDepartment(Department dpm){
+          return departmentRepository.save(dpm);
     }
 
 
     @Override
     public Department getDepartmentById(long departmentId) {
-        return this.departmentRepository.findById(departmentId).orElse(null);
-
+      Department dpmFound = departmentRepository.findById(departmentId).orElse(null);
+        return dpmFound;
     }
 
     @Override
-    public Department getAllDepartment(){
-        return (Department) departmentRepository.findAll();
+    public List<Department> getAllDepartment(){
+        return departmentRepository.findAll();
     }
 
     @Override
-    public Department updateDepartment(long departmentId, Department dpm){
-        Department dpmFound =departmentRepository.findById(departmentId).orElse(null);
-        dpmFound.setDepartmentId(dpm.getDepartmentId());
-        dpmFound.setDepartmentName(dpm.getDepartmentName());
-    return departmentRepository.save(dpmFound);
+    public Department updateDepartment(Department dpm){
+
+
+    return departmentRepository.save(dpm);
     }
 
     @Override
-    public void deleteDepartment(long departmentId){
-        Department dpmFound = departmentRepository.findById(departmentId).orElse(null);
-        departmentRepository.deleteById(dpmFound.getDepartmentId());
+    public void deleteDepartment(long id){
+        Department dpmFound = departmentRepository.findById(id).orElse(null);
+        assert dpmFound != null;
+        departmentRepository.deleteById(dpmFound.getDepartment_Id());
     }
 
 }

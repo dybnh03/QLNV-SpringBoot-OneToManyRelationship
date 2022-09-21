@@ -1,16 +1,13 @@
 package com.example.qlnvonetomanyrelationship.model;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
+
 
 @Entity
 @Getter
@@ -20,13 +17,12 @@ import java.util.Set;
 @Table(name = "department")
 public class Department {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "department_id")
-    private long departmentId;
-    private String departmentName;
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long department_Id;
+    private String department_Name;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Employee> employees;
+    @JsonBackReference
+    private List<Employee> employeeList;
 
 }
